@@ -15,7 +15,7 @@ pub unsafe trait PageAllocator: Debug + Sync {
     /// 返回值:
     ///     - 初始化成功，返回 ()
     ///     - 初始化失败，可能由于start_addr或end_addr未对齐最小页尺寸或其他逻辑错误
-    fn init(&mut self, start_addr: usize, end_addr: usize) -> Result<(), AllocError>;
+    unsafe fn init(&mut self, start_addr: usize, end_addr: usize) -> Result<(), AllocError>;
 
     /// 总物理内存，单位bytes
     /// 返回值：
@@ -69,7 +69,7 @@ pub unsafe trait VMAllocator: GlobalAlloc {
     /// 返回值:
     ///     - 初始化成功，返回 ()
     ///     - 初始化失败，可能由于start_addr或end_addr未对齐最小页尺寸或其他逻辑错误
-    fn init(&mut self, start_addr: usize, end_addr: usize) -> Result<(), AllocError>;
+    unsafe fn init(&mut self, start_addr: usize, end_addr: usize) -> Result<(), AllocError>;
 
     /// 总虚拟内存，单位bytes
     /// 返回值：
