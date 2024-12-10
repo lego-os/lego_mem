@@ -1,4 +1,4 @@
-#[cfg(feature = "vm")]
+#[cfg(any(feature = "vm", feature = "page"))]
 use crate::AllocError;
 #[cfg(feature = "vm")]
 use core::alloc::GlobalAlloc;
@@ -85,5 +85,4 @@ pub unsafe trait VMAllocator: GlobalAlloc {
     /// 返回值：
     ///     - 函数不应该出现任何错误，返回值应该大于等于0，并且对齐到最小页尺寸
     fn allocated_size(&self) -> usize;
-
 }
