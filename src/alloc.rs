@@ -11,9 +11,6 @@ pub unsafe trait PageAllocator: Debug + Sync {
     /// 初始化物理页式内存分配器，init函数的过程应该是互斥的，OS启动之后，这个函数只能被互斥的执行一次
     /// 参数：
     ///     - alloc_start: 可分配内存的开始地址
-    /// 返回值:
-    ///     - 初始化成功，返回 ()
-    ///     - 初始化失败，可能由于start_addr或end_addr未对齐最小页尺寸或其他逻辑错误
     unsafe fn init(&mut self, alloc_start:usize) -> Result<(), AllocError>;
 
     /// 总物理内存，单位bytes
@@ -38,7 +35,7 @@ pub unsafe trait PageAllocator: Debug + Sync {
 
     /// 按页申请连续的物理内存
     /// 参数：
-    ///     - num_page: 需要的页数；参数值必须大于0，当为0时，不会出现错误，会返回一个空指针；
+    ///     - num_page: 需要的页数；参数值必须大于0，当为0时，会返回一个IllegalAddr错误；
     /// 返回值：
     ///     - 申请成功，返回一个以对齐到最小页尺寸地址开始的地址指针；
     ///     - 当系统中没有足够的物理内存时，返回OutOfMemory错误；
@@ -64,9 +61,6 @@ pub unsafe trait VMAllocator: GlobalAlloc {
     /// 初始化物理页式内存分配器，init函数的过程应该是互斥的，OS启动之后，这个函数只能被互斥的执行一次
     /// 参数：
     ///     - alloc_start: 可分配内存的开始地址
-    /// 返回值:
-    ///     - 初始化成功，返回 ()
-    ///     - 初始化失败，可能由于start_addr或end_addr未对齐最小页尺寸或其他逻辑错误
     unsafe fn init(&mut self, alloc_start: usize) -> Result<(), AllocError>;
 
     /// 总虚拟内存，单位bytes
