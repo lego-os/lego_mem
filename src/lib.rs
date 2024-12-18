@@ -16,11 +16,14 @@
 #![feature(slice_ptr_get)]
 #![feature(allocator_api)]
 
-mod piece_alloc;
 mod err;
 mod mapper;
 mod page_alloc;
+mod piece_alloc;
 mod vmalloc;
 
-pub use page_alloc::*;
 pub use err::AllocError;
+pub use mapper::*;
+pub use page_alloc::*;
+pub use piece_alloc::PieceAllocator;
+pub use vmalloc::VMAllocator;
