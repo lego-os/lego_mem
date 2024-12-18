@@ -1,12 +1,17 @@
-use core::{alloc::Layout, error::Error, fmt::Display};
+use core::{
+    alloc::{Layout, LayoutError},
+    error::Error,
+    fmt::Display,
+};
 
 /// 内存分配或释放错误类型
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AllocError {
-    Misaligned(Layout),
+    Misaligned(LayoutError),
     OutOfMemory(Layout),
     NullPointer(usize),
     IllegalAddr(usize),
+    Other(core::alloc::AllocError),
 }
 
 impl Error for AllocError {
@@ -32,8 +37,9 @@ impl Display for AllocError {
             }
             AllocError::NullPointer(addr) => write!(f, "Null pointer! [ address: {} ]", *addr),
             AllocError::Misaligned(layout) => {
-                write!(f, "Layout misaligned! [ layout: {:?} ]", layout)
+                write!(f, "{}", layout)
             }
+            AllocError::Other(err) => write!(f, "{}", err),
         }
     }
 }
