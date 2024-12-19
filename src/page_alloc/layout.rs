@@ -81,15 +81,6 @@ impl PageLayout {
     }
 
     #[inline]
-    pub const fn min() -> Self {
-        let align = Align::Align1Shl12;
-        Self {
-            size: align as usize,
-            align: align,
-        }
-    }
-
-    #[inline]
     pub const fn from_align(algin: Align) -> Self {
         Self {
             size: algin as usize,
