@@ -94,8 +94,8 @@ impl PageLayout {
     }
 
     #[inline]
-    pub const fn align(&self) -> usize {
-        self.align as usize
+    pub const fn align(&self) -> Align {
+        self.align
     }
 
     #[inline]
