@@ -13,7 +13,7 @@ pub trait PageAllocator: Send + Sync {
 
     fn alloc_pages(&mut self, flags: ApFlags, layout: PageLayout) -> Result<Page, AllocError>;
 
-    fn alloc_pages_zero(&mut self, flags: ApFlags, layout:PageLayout) -> Result<Page, AllocError> {
+    fn alloc_pages_zero(&mut self, flags: ApFlags, layout: PageLayout) -> Result<Page, AllocError> {
         let page = self.alloc_pages(flags, layout)?;
         let ptr = page.addr as *mut u8;
         unsafe {

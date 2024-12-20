@@ -103,3 +103,13 @@ impl PageLayout {
         self.align = algin;
     }
 }
+
+impl Default for PageLayout {
+    fn default() -> Self {
+        let align = Align::Align1Shl12;
+        Self {
+            size: align as usize,
+            align,
+        }
+    }
+}
