@@ -23,12 +23,12 @@ pub enum Align {
 
 impl Align {
     #[inline]
-    pub const fn as_order(&self) -> u32 {
+    pub const fn as_power(&self) -> u32 {
         (*self as usize).trailing_zeros()
     }
 
-    pub const fn from_order(order: u32) -> Option<Self> {
-        match order {
+    pub const fn from_power(power: u32) -> Option<Self> {
+        match power {
             12 => Some(Self::Align1Shl12),
             13 => Some(Self::Align1Shl13),
             14 => Some(Self::Align1Shl14),
@@ -64,11 +64,11 @@ impl PageLayout {
         if size == 0 {
             return None;
         }
-        let order = usize::BITS - size.leading_zeros() - 1;
-        let align = if 1 << order == size {
-            Align::from_order(order)
+        let power = usize::BITS - size.leading_zeros() - 1;
+        let align = if 1 << power == size {
+            Align::from_power(power)
         } else {
-            Align::from_order(order + 1)
+            Align::from_power(power + 1)
         };
         if align.is_none() {
             None
