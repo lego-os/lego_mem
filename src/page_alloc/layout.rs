@@ -64,6 +64,12 @@ impl PageLayout {
         if size == 0 {
             return None;
         }
+        if size < Align::Align1Shl12 as usize {
+            return Some(Self {
+                size,
+                align: Align::Align1Shl12,
+            });
+        }
         let power = usize::BITS - size.leading_zeros() - 1;
         let align = if 1 << power == size {
             Align::from_power(power)
