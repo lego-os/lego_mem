@@ -1,24 +1,24 @@
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Align {
-    Align1Shl12 = 1 << 12,
-    Align1Shl13 = 1 << 13,
-    Align1Shl14 = 1 << 14,
-    Align1Shl15 = 1 << 15,
-    Align1Shl16 = 1 << 16,
-    Align1Shl17 = 1 << 17,
-    Align1Shl18 = 1 << 18,
-    Align1Shl19 = 1 << 19,
-    Align1Shl20 = 1 << 20,
-    Align1Shl21 = 1 << 21,
-    Align1Shl22 = 1 << 22,
-    Align1Shl23 = 1 << 23,
-    Align1Shl24 = 1 << 24,
-    Align1Shl25 = 1 << 25,
-    Align1Shl26 = 1 << 26,
-    Align1Shl27 = 1 << 27,
-    Align1Shl28 = 1 << 28,
-    Align1Shl29 = 1 << 29,
-    Align1Shl30 = 1 << 30,
+    K4 = 1 << 12,
+    K8 = 1 << 13,
+    K16 = 1 << 14,
+    K32 = 1 << 15,
+    K64 = 1 << 16,
+    K128 = 1 << 17,
+    K256 = 1 << 18,
+    K512 = 1 << 19,
+    M1 = 1 << 20,
+    M2 = 1 << 21,
+    M4 = 1 << 22,
+    M8 = 1 << 23,
+    M16 = 1 << 24,
+    M32 = 1 << 25,
+    M64 = 1 << 26,
+    M128 = 1 << 27,
+    M256 = 1 << 28,
+    M512 = 1 << 29,
+    G1 = 1 << 30,
 }
 
 impl Align {
@@ -29,25 +29,25 @@ impl Align {
 
     pub const fn from_power(power: u32) -> Option<Self> {
         match power {
-            12 => Some(Self::Align1Shl12),
-            13 => Some(Self::Align1Shl13),
-            14 => Some(Self::Align1Shl14),
-            15 => Some(Self::Align1Shl15),
-            16 => Some(Self::Align1Shl16),
-            17 => Some(Self::Align1Shl17),
-            18 => Some(Self::Align1Shl18),
-            19 => Some(Self::Align1Shl19),
-            20 => Some(Self::Align1Shl20),
-            21 => Some(Self::Align1Shl21),
-            22 => Some(Self::Align1Shl22),
-            23 => Some(Self::Align1Shl23),
-            24 => Some(Self::Align1Shl24),
-            25 => Some(Self::Align1Shl25),
-            26 => Some(Self::Align1Shl26),
-            27 => Some(Self::Align1Shl27),
-            28 => Some(Self::Align1Shl28),
-            29 => Some(Self::Align1Shl29),
-            30 => Some(Self::Align1Shl30),
+            12 => Some(Self::K4),
+            13 => Some(Self::K8),
+            14 => Some(Self::K16),
+            15 => Some(Self::K32),
+            16 => Some(Self::K64),
+            17 => Some(Self::K128),
+            18 => Some(Self::K256),
+            19 => Some(Self::K512),
+            20 => Some(Self::M1),
+            21 => Some(Self::M2),
+            22 => Some(Self::M4),
+            23 => Some(Self::M8),
+            24 => Some(Self::M16),
+            25 => Some(Self::M32),
+            26 => Some(Self::M64),
+            27 => Some(Self::M128),
+            28 => Some(Self::M256),
+            29 => Some(Self::M512),
+            30 => Some(Self::G1),
             _ => None,
         }
     }
@@ -64,10 +64,10 @@ impl PageLayout {
         if size == 0 {
             return None;
         }
-        if size < Align::Align1Shl12 as usize {
+        if size < Align::K4 as usize {
             return Some(Self {
                 size,
-                align: Align::Align1Shl12,
+                align: Align::K4,
             });
         }
         let power = usize::BITS - size.leading_zeros() - 1;
@@ -112,7 +112,7 @@ impl PageLayout {
 
 impl Default for PageLayout {
     fn default() -> Self {
-        let align = Align::Align1Shl12;
+        let align = Align::KB4;
         Self {
             size: align as usize,
             align,
