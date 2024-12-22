@@ -108,11 +108,10 @@ impl PageLayout {
     pub const fn align_to(&mut self, algin: Align) {
         self.align = algin;
     }
-}
 
-impl Default for PageLayout {
-    fn default() -> Self {
-        let align = Align::KB4;
+    #[inline]
+    pub const fn min() -> Self {
+        let align = Align::K4;
         Self {
             size: align as usize,
             align,
