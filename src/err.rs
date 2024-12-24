@@ -1,12 +1,12 @@
-use core::{alloc::Layout, error::Error, fmt::Display};
+use core::{error::Error, fmt::Display};
 
 /// 内存分配或释放错误类型
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum AllocError {
     Misaligned,
-    OutOfMemory(Layout),
-    NullPointer(usize),
-    IllegalAddr(usize),
+    OutOfMemory,
+    NullPointer,
+    IllegalAddr,
     Other(core::alloc::AllocError),
 }
 
@@ -27,13 +27,13 @@ impl Error for AllocError {
 impl Display for AllocError {
     fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
-            AllocError::IllegalAddr(addr) => write!(f, "Illegal address [ address: {} ]", addr),
-            AllocError::OutOfMemory(layout) => {
-                write!(f, "Memory overflow [ layout size: {} ]", layout.size())
+            AllocError::IllegalAddr => write!(f, "illegal address"),
+            AllocError::OutOfMemory => {
+                write!(f, "memory overflow")
             }
-            AllocError::NullPointer(addr) => write!(f, "Null pointer [ address: {} ]", *addr),
+            AllocError::NullPointer => write!(f, "null pointer"),
             AllocError::Misaligned => {
-                write!(f, "Access is not aligned")
+                write!(f, "access is not aligned")
             }
             AllocError::Other(err) => write!(f, "{}", err),
         }

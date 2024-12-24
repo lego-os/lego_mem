@@ -5,19 +5,19 @@ mod layout;
 mod page;
 
 pub use flags::ApFlags;
-pub use layout::{Align, PageLayout};
+pub use layout::Align;
 pub use page::Page;
 
 pub trait PageAllocator: Send + Sync {
     const MIN_PAGE_SIZE: usize;
 
-    fn alloc_pages(&mut self, flags: ApFlags, layout: PageLayout) -> Result<Page, AllocError>;
+    fn alloc_pages(&mut self, flags: ApFlags, align: Align) -> Result<Page, AllocError>;
 
-    fn alloc_pages_zero(&mut self, flags: ApFlags, layout: PageLayout) -> Result<Page, AllocError> {
-        let page = self.alloc_pages(flags, layout)?;
+    fn alloc_pages_zero(&mut self, flags: ApFlags, align: Align) -> Result<Page, AllocError> {
+        let page = self.alloc_pages(flags, align)?;
         let ptr = page.addr as *mut u8;
         unsafe {
-            ptr.write_bytes(0, page.layout.align() as usize);
+            ptr.write_bytes(0, align.as_size());
         };
         Ok(page)
     }

@@ -20,10 +20,12 @@ mod err;
 mod mapper;
 mod page_alloc;
 mod piece_alloc;
+mod region;
 mod vmalloc;
 
 pub use err::AllocError;
 pub use mapper::*;
 pub use page_alloc::*;
 pub use piece_alloc::PieceAllocator;
+pub use region::*;
 pub use vmalloc::VMAllocator;

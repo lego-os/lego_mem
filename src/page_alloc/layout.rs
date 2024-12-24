@@ -1,5 +1,6 @@
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum Align {
+    #[default]
     K4 = 1 << 12,
     K8 = 1 << 13,
     K16 = 1 << 14,
@@ -27,6 +28,7 @@ impl Align {
         (*self as usize).trailing_zeros()
     }
 
+    #[inline]
     pub const fn from_power(power: u32) -> Option<Self> {
         match power {
             12 => Some(Self::K4),
@@ -51,70 +53,25 @@ impl Align {
             _ => None,
         }
     }
-}
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
-pub struct PageLayout {
-    size: usize,
-    align: Align,
-}
-
-impl PageLayout {
+    #[inline]
     pub const fn from_size(size: usize) -> Option<Self> {
         if size == 0 {
             return None;
         }
-        if size < Align::K4 as usize {
-            return Some(Self {
-                size,
-                align: Align::K4,
-            });
+        if size <= Align::K4 as usize {
+            return Some(Align::K4);
         }
         let power = usize::BITS - size.leading_zeros() - 1;
-        let align = if 1 << power == size {
+        if 1 << power == size {
             Align::from_power(power)
         } else {
             Align::from_power(power + 1)
-        };
-        if align.is_none() {
-            None
-        } else {
-            Some(Self {
-                size: size,
-                align: align.unwrap(),
-            })
         }
     }
 
     #[inline]
-    pub const fn from_align(algin: Align) -> Self {
-        Self {
-            size: algin as usize,
-            align: algin,
-        }
-    }
-
-    #[inline]
-    pub const fn size(&self) -> usize {
-        self.size
-    }
-
-    #[inline]
-    pub const fn align(&self) -> Align {
-        self.align
-    }
-
-    #[inline]
-    pub const fn align_to(&mut self, algin: Align) {
-        self.align = algin;
-    }
-
-    #[inline]
-    pub const fn min() -> Self {
-        let align = Align::K4;
-        Self {
-            size: align as usize,
-            align,
-        }
+    pub fn as_size(&self) -> usize {
+        *self as usize
     }
 }
